@@ -3,8 +3,8 @@
 ----------------------------
 # Microbit Moisture Sensor
 ## Required hardware
-[Octopus:bit](https://www.elecfreaks.com/learn-en/microbitKit/Tinker_Kit/octopus_bit.html)
-[Amazon](https://www.amazon.com/Elecfreaks-Microbit-Programmable-Learning-Guidance/dp/B0822L63MB)
+[Octopus:bit](https://www.elecfreaks.com/learn-en/microbitKit/Tinker_Kit/octopus_bit.html)  
+[Amazon](https://www.amazon.com/Elecfreaks-Microbit-Programmable-Learning-Guidance/dp/B0822L63MB)  
 
 ## Required extension
 Tinkercademy  
