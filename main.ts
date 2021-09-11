@@ -1,6 +1,6 @@
 /** 
 ----------------------------
-Microbit Moisture With Filesystem saving
+Microbit Moisture Sensor
 MIT License
 Copyright (c) [year] [fullname]
 
