@@ -3,10 +3,10 @@
 ----------------------------
 # Microbit Moisture Sensor
 ## Required extension
-Tinkercademy
-[Github](https://github.com/Tinkertanker/pxt-tinkercademy-tinker-kit)
+Tinkercademy  
+[Github](https://github.com/Tinkertanker/pxt-tinkercademy-tinker-kit)  
 [microbit-pkg](https://makecode.microbit.org/pkg/Tinkertanker/pxt-tinkercademy-tinker-kit)
-Bluetooth
+
 -----------------------------
 ## Controls
 [A] Start measuring moisture using the moisture meter
