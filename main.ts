@@ -1,6 +1,6 @@
 /** 
 ----------------------------
-Microbit Moisture Sensor
+# Microbit Moisture Sensor
 MIT License
 Copyright (c) [year] [fullname]
 
@@ -26,46 +26,73 @@ Required extension
 Tinkercadmy
 [https://github.com/Tinkertanker/pxt-tinkercademy-tinker-kit]
 [https://makecode.microbit.org/pkg/Tinkertanker/pxt-tinkercademy-tinker-kit]
+Bluetooth
 -----------------------------
-Controls
+## Controls
 [A] Start measuring moisture using the moisture meter
+
+## Bluetooth
+Data can be sent over to a bluetooth uart supported device such as a your phone. for easier reading and so on.
 
  */
 //  Erklær en global array
 let moisture = [0.00]
 _py.py_array_clear(moisture)
-//  Aktiver OLED
-OLED.init(128, 64)
-//  Fjern buffer fra forrige bruk
-OLED.clear()
-//  Skriv navnet og UUID til enheten
-OLED.writeStringNewLine(control.deviceName() + " ")
-OLED.writeNum(control.deviceSerialNumber())
-OLED.writeStringNewLine("")
-//  Skriv at systemet er klart, og instrukjsoner
-OLED.writeStringNewLine("Systemet er klart!")
-OLED.writeStringNewLine("Trykk A, for aa starte Sensor.")
-//  Sjekk om Fuktighet sensor er plugget inn.
-if (tinkercademy.MoistureSensor(AnalogPin.P0) == 0) {
-    OLED.clear()
-    OLED.writeStringNewLine("Sensor er 0, har du husket å koble den til i PIN_0?")
-    while (true) {
+let bluetoothIsConnected = false
+function init() {
+    //  Aktiver OLED
+    OLED.init(128, 64)
+    //  Aktiver Blåtann.
+    bluetooth.startUartService()
+    bluetooth.onBluetoothConnected(function on_bluetooth_connected() {
+        
         led.plot(0, 0)
-    }
-} else {
-    //  Om den er plugget inn fortsetter vi koden
-    input.onButtonPressed(Button.A, function on_button_pressed_a() {
-        //  Fjern instruksjoner.
-        OLED.clear()
-        basic.forever(function background_moisture() {
-            let measure: string;
-            
-            //  Finn fuktigheten til sensoren
-            measure = "" + tinkercademy.MoistureSensor(AnalogPin.P0)
-            //  Skriv ut fuktighet til OLED og lar bare 6 tall gå igjennom, gjør det lettere å lese.
-            OLED.writeStringNewLine(measure.slice(0, 6))
-            
-        })
+        bluetoothIsConnected = true
+        
     })
+    bluetooth.onBluetoothDisconnected(function on_bluetooth_disconnected() {
+        
+        bluetoothIsConnected = false
+        
+    })
+    //  Fjern buffer fra forrige bruk
+    OLED.clear()
+    //  Skriv navnet og UUID til enheten
+    OLED.writeStringNewLine(control.deviceName() + " ")
+    OLED.writeNum(control.deviceSerialNumber())
+    OLED.writeStringNewLine("")
+    //  Skriv at systemet er klart, og instrukjsoner
+    OLED.writeStringNewLine("Systemet er klart!")
+    OLED.writeStringNewLine("Trykk A, for aa starte Sensor.")
+    //  Sjekk om Fuktighet sensor er plugget inn.
+    if (tinkercademy.MoistureSensor(AnalogPin.P0) == 0) {
+        OLED.clear()
+        OLED.writeStringNewLine("Sensor er 0, har du husket å koble den til i PIN_0?")
+        while (true) {
+            led.plot(0, 0)
+        }
+    } else {
+        //  Om den er plugget inn fortsetter vi koden
+        input.onButtonPressed(Button.A, function on_button_pressed_a() {
+            //  Fjern instruksjoner.
+            OLED.clear()
+            basic.forever(function background_moisture() {
+                let measure: string;
+                
+                
+                //  Finn fuktigheten til sensoren
+                measure = "" + tinkercademy.MoistureSensor(AnalogPin.P0)
+                //  Skriv ut fuktighet til OLED og lar bare 6 tall gå igjennom, gjør det lettere å lese.
+                OLED.writeStringNewLine(measure.slice(0, 6))
+                if (bluetoothIsConnected) {
+                    bluetooth.uartWriteLine(measure.slice(0, 6))
+                }
+                
+                
+            })
+        })
+    }
+    
 }
 
+init()

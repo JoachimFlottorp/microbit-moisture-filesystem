@@ -1,5 +1,18 @@
 
 > Open this page at [https://joachimflottorp.github.io/microbit-moisture-filesystem/](https://joachimflottorp.github.io/microbit-moisture-filesystem/)
+----------------------------
+# Microbit Moisture Sensor
+## Required extension
+Tinkercademy
+[Github](https://github.com/Tinkertanker/pxt-tinkercademy-tinker-kit)
+[microbit-pkg](https://makecode.microbit.org/pkg/Tinkertanker/pxt-tinkercademy-tinker-kit)
+Bluetooth
+-----------------------------
+## Controls
+[A] Start measuring moisture using the moisture meter
+
+## Bluetooth
+Data can be sent over to a bluetooth uart supported device such as a your phone. for easier reading and so on.
 
 ## Use as Extension
 

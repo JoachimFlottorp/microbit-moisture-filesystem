@@ -1,6 +1,6 @@
 """
 ----------------------------
-Microbit Moisture Sensor
+# Microbit Moisture Sensor
 MIT License
 Copyright (c) [year] [fullname]
 
@@ -26,13 +26,14 @@ Required extension
 Tinkercadmy
 [https://github.com/Tinkertanker/pxt-tinkercademy-tinker-kit]
 [https://makecode.microbit.org/pkg/Tinkertanker/pxt-tinkercademy-tinker-kit]
+Bluetooth
 -----------------------------
-Controls
+## Controls
 [A] Start measuring moisture using the moisture meter
+
+## Bluetooth
+Data can be sent over to a bluetooth uart supported device such as a your phone. for easier reading and so on.
 """
-
-
-
 
 from microbit import *
 
@@ -40,12 +41,17 @@ from microbit import *
 moisture = [0.00]
 moisture.clear()
 
+bluetoothIsConnected = False
+
 def background_moisture() -> void:
     global moisture
+    global bluetoothIsConnected
     # Finn fuktigheten til sensoren
     measure = str(tinkercademy.moisture_sensor(AnalogPin.P0))
     # Skriv ut fuktighet til OLED og lar bare 6 tall gå igjennom, gjør det lettere å lese.
     OLED.write_string_new_line(measure[0:6])
+    if bluetoothIsConnected:
+        bluetooth.uart_write_line(measure[0:6])
     pass
 
 def on_button_pressed_a() -> void:
@@ -53,26 +59,44 @@ def on_button_pressed_a() -> void:
     OLED.clear()
     basic.forever(background_moisture)
 
-# Aktiver OLED
-OLED.init(128, 64)
+def on_bluetooth_connected():
+    global bluetoothIsConnected
+    led.plot(0, 0)
+    bluetoothIsConnected = True
+    pass
 
-# Fjern buffer fra forrige bruk
-OLED.clear()
-# Skriv navnet og UUID til enheten
-OLED.write_string_new_line(control.device_name() + " ")
-OLED.write_num(control.device_serial_number())
-OLED.write_string_new_line("")
+def on_bluetooth_disconnected():
+    global bluetoothIsConnected
+    bluetoothIsConnected = False
+    pass
 
-# Skriv at systemet er klart, og instrukjsoner
-OLED.write_string_new_line("Systemet er klart!")
-OLED.write_string_new_line("Trykk A, for aa starte Sensor.")
+def init():
+    # Aktiver OLED
+    OLED.init(128, 64)
 
-# Sjekk om Fuktighet sensor er plugget inn.
-if(tinkercademy.moisture_sensor(AnalogPin.P0) == 0):
+    # Aktiver Blåtann.
+    bluetooth.start_uart_service()
+    bluetooth.on_bluetooth_connected(on_bluetooth_connected)
+    bluetooth.on_bluetooth_disconnected(on_bluetooth_disconnected)
+    # Fjern buffer fra forrige bruk
     OLED.clear()
-    OLED.write_string_new_line("Sensor er 0, har du husket å koble den til i PIN_0?")
-    while True:
-        led.plot(0, 0)
-# Om den er plugget inn fortsetter vi koden
-else:
-    input.on_button_pressed(Button.A, on_button_pressed_a)
+    # Skriv navnet og UUID til enheten
+    OLED.write_string_new_line(control.device_name() + " ")
+    OLED.write_num(control.device_serial_number())
+    OLED.write_string_new_line("")
+
+    # Skriv at systemet er klart, og instrukjsoner
+    OLED.write_string_new_line("Systemet er klart!")
+    OLED.write_string_new_line("Trykk A, for aa starte Sensor.")
+
+    # Sjekk om Fuktighet sensor er plugget inn.
+    if(tinkercademy.moisture_sensor(AnalogPin.P0) == 0):
+        OLED.clear()
+        OLED.write_string_new_line("Sensor er 0, har du husket å koble den til i PIN_0?")
+        while True:
+            led.plot(0, 0)
+    # Om den er plugget inn fortsetter vi koden
+    else:
+        input.on_button_pressed(Button.A, on_button_pressed_a)
+
+init()
