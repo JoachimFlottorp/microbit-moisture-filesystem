@@ -38,21 +38,24 @@ Data can be sent over to a bluetooth uart supported device such as a your phone.
 //  Erklær en global array
 let moisture = [0.00]
 _py.py_array_clear(moisture)
-let bluetoothIsConnected = false
+function write_result(measure: string) {
+    OLED.writeStringNewLine(measure)
+    bluetooth.uartWriteLine(measure)
+}
+
 function init() {
     //  Aktiver OLED
     OLED.init(128, 64)
     //  Aktiver Blåtann.
     bluetooth.startUartService()
     bluetooth.onBluetoothConnected(function on_bluetooth_connected() {
-        
-        led.plot(0, 0)
-        bluetoothIsConnected = true
+        let bluetoothIsConnected = true
+        basic.showIcon(IconNames.Yes)
         
     })
     bluetooth.onBluetoothDisconnected(function on_bluetooth_disconnected() {
-        
-        bluetoothIsConnected = false
+        let bluetoothIsConnected = false
+        basic.showIcon(IconNames.No)
         
     })
     //  Fjern buffer fra forrige bruk
@@ -79,15 +82,10 @@ function init() {
             basic.forever(function background_moisture() {
                 let measure: string;
                 
-                
                 //  Finn fuktigheten til sensoren
                 measure = "" + tinkercademy.MoistureSensor(AnalogPin.P0)
                 //  Skriv ut fuktighet til OLED og lar bare 6 tall gå igjennom, gjør det lettere å lese.
-                OLED.writeStringNewLine(measure.slice(0, 6))
-                if (bluetoothIsConnected) {
-                    bluetooth.uartWriteLine(measure.slice(0, 6))
-                }
-                
+                write_result(measure.slice(0, 6))
                 
             })
         })

@@ -41,18 +41,18 @@ from microbit import *
 moisture = [0.00]
 moisture.clear()
 
-bluetoothIsConnected = False
-
 def background_moisture() -> void:
     global moisture
-    global bluetoothIsConnected
     # Finn fuktigheten til sensoren
     measure = str(tinkercademy.moisture_sensor(AnalogPin.P0))
     # Skriv ut fuktighet til OLED og lar bare 6 tall gå igjennom, gjør det lettere å lese.
-    OLED.write_string_new_line(measure[0:6])
-    if bluetoothIsConnected:
-        bluetooth.uart_write_line(measure[0:6])
+    write_result(measure[0:6])
+
     pass
+
+def write_result(measure: str) -> void:
+    OLED.write_string_new_line(measure)
+    bluetooth.uart_write_line(measure)
 
 def on_button_pressed_a() -> void:
     # Fjern instruksjoner.
@@ -60,15 +60,13 @@ def on_button_pressed_a() -> void:
     basic.forever(background_moisture)
 
 def on_bluetooth_connected():
-    global bluetoothIsConnected
-    # [shrug] just want some way of notifying, yes i am connected
-    basic.show_arrow(ArrowNames.NORTH)
     bluetoothIsConnected = True
+    basic.show_icon(IconNames.YES)
     pass
 
 def on_bluetooth_disconnected():
-    global bluetoothIsConnected
     bluetoothIsConnected = False
+    basic.show_icon(IconNames.NO)
     pass
 
 def init():

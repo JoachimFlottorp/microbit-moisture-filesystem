@@ -4,7 +4,8 @@
     "dependencies": {
         "core": "*",
         "tinkercademy-tinker-kit": "github:tinkertanker/pxt-tinkercademy-tinker-kit#v1.1.1",
-        "microphone": "*"
+        "microphone": "*",
+        "bluetooth": "*"
     },
     "files": [
         "main.ts",
@@ -22,5 +23,16 @@
         "microbit"
     ],
     "preferredEditor": "pyprj",
-    "languageRestriction": "python-only"
+    "languageRestriction": "python-only",
+    "yotta": {
+        "config": {
+            "microbit-dal": {
+                "bluetooth": {
+                    "open": 1,
+                    "whitelist": 0,
+                    "security_level": null
+                }
+            }
+        }
+    }
 }
