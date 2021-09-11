@@ -61,7 +61,8 @@ def on_button_pressed_a() -> void:
 
 def on_bluetooth_connected():
     global bluetoothIsConnected
-    led.plot(0, 0)
+    # [shrug] just want some way of notifying, yes i am connected
+    basic.show_arrow(ArrowNames.NORTH)
     bluetoothIsConnected = True
     pass
 
