@@ -14,6 +14,9 @@ Bluetooth
 ## Bluetooth
 Data can be sent over to a bluetooth uart supported device such as a your phone. for easier reading and so on.
 
+### Filesystem
+Does not work, don't worry about that, os module in python does not work or something, idk
+
 ## Use as Extension
 
 This repository can be added as an **extension** in MakeCode.
