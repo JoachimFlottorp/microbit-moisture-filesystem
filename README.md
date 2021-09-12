@@ -16,7 +16,7 @@ Tinkercademy
 [A] Start measuring moisture using the moisture meter
 
 ## Bluetooth
-Data can be sent over to a bluetooth uart supported device such as a your phone. for easier reading and so on.
+Data can be sent over to a bluetooth supported device such as a your phone. for easier reading and so on.
 
 ### Filesystem
 Does not work, don't worry about that, os module in python does not work or something, idk
